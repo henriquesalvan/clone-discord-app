@@ -1,0 +1,60 @@
+@import "../../assets/styles/colors";
+
+.btn {
+    text-transform: uppercase;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+@each $i in $colors {
+
+    .btn.btn-#{nth($i, 1)} {
+        border-color: nth($i, 2);
+        background-color: nth($i, 2);
+        color: lighten(map_get($colors, light), 10);
+
+        &:hover {
+            border-color: nth($i, 2);
+            background-color: darken(nth($i, 2), 5);
+            color: lighten(map_get($colors, light), 10);
+        }
+
+        &[disabled] {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    }
+
+    .btn.btn-#{nth($i, 1)}-outline {
+        color: nth($i, 2);
+        border-color: nth($i, 2);
+        background-color: lighten(map_get($colors, light), 5);
+
+        &:hover {
+            color: nth($i, 2);
+            border-color: nth($i, 2);
+            background-color: lighten(map_get($colors, light), 4);
+        }
+
+        &[disabled] {
+            opacity: 0.7;
+        }
+    }
+
+}
+
+.btn.btn-light {
+    color: map_get($colors, dark);
+
+    &:hover {
+        color: map_get($colors, dark);
+    }
+}

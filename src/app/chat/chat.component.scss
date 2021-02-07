@@ -1,0 +1,46 @@
+:host {
+    position: absolute;
+    margin-left: -250px;
+    left: 50%;
+}
+
+.messages {
+    max-height: 400px;
+    overflow-x: auto;
+    position: relative;
+    padding-bottom: 10px;
+    padding-right: 5px;
+
+    .message {
+        margin-top: 10px;
+        background-color: #e0e0e0;
+        padding: 10px;
+        border-radius: 3px;
+
+        .user {
+            font-weight: bold;
+
+            .hour {
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+::ng-deep .card {
+    .card-header {
+        button.btn-danger {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+        }
+    }
+
+    .card-footer {
+        margin-top: 0 !important;
+
+        .form-group input {
+            margin-bottom: 0 !important;
+        }
+    }
+}

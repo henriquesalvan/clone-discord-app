@@ -1,0 +1,31 @@
+<app-card title="Crie sua conta">
+    <div card-content>
+        <div class="row">
+            <div class="col-xs-12">
+                <app-fieldrow label="Nome Completo">
+                    <input type="text" name="name" placeholder="Nome Completo"/>
+                </app-fieldrow>
+            </div>
+            <div class="col-xs-12">
+                <app-fieldrow label="CPF">
+                    <input type="text" [mask]="'000.000.000-00'" name="cpf" placeholder="CPF"/>
+                </app-fieldrow>
+            </div>
+            <div class="col-xs-12">
+                <app-fieldrow label="Senha">
+                    <input type="password" name="password" placeholder="Senha"/>
+                </app-fieldrow>
+            </div>
+        </div>
+    </div>
+    <div card-footer>
+        <div class="row">
+            <div class="col-xs-12">
+                <app-button [loading]="false" class="btn-block btn-secondary">Criar Agora</app-button>
+                <p class="login">
+                    <a [routerLink]="['/login']">Já tem uma conta?</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</app-card>

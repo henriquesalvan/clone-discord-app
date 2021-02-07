@@ -1,0 +1,16 @@
+:host {
+    position: absolute;
+    margin-left: -250px;
+    left: 50%;
+}
+
+::ng-deep .card-footer {
+    button {
+        padding: 15px !important;
+    }
+
+    p.register {
+        margin-top: 10px;
+        color: #72767D;
+    }
+}

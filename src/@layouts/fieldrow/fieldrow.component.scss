@@ -1,0 +1,40 @@
+.form-group {
+    position: relative;
+    width: 100%;
+
+    label {
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 8px;
+        color: #8E9297;
+        font-weight: bold;
+    }
+
+    ::ng-deep input, select, textarea {
+        width: 100%;
+        height: 46px;
+        padding: 10px;
+        font-size: 18px;
+        border-radius: 3px;
+        border: 1px solid #222222;
+        background-color: #313339;
+        margin-bottom: 20px;
+        transition: border-color .2s;
+        color: #DCDDDE;
+
+        &:hover {
+            border: 1px solid #000000;
+        }
+
+        &:focus {
+            border: 1px solid #7289DA;
+        }
+    }
+
+    ::ng-deep button.btn-action {
+        position: absolute;
+        height: 46px;
+        padding: 10px;
+        right: 0;
+    }
+}

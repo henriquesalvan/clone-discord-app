@@ -1,0 +1,26 @@
+<app-card title="Faça seu login">
+    <div card-content>
+        <div class="row">
+            <div class="col-xs-12">
+                <app-fieldrow label="CPF">
+                    <input type="text" name="cpf" [mask]="'000.000.000-00'" placeholder="CPF"/>
+                </app-fieldrow>
+            </div>
+            <div class="col-xs-12">
+                <app-fieldrow label="Senha">
+                    <input type="password" name="password" placeholder="Senha"/>
+                </app-fieldrow>
+            </div>
+        </div>
+    </div>
+    <div card-footer>
+        <div class="row">
+            <div class="col-xs-12">
+                <app-button (click)="chat()" [loading]="submitLoading" class="btn-block btn-secondary">Continuar</app-button>
+                <p class="register">
+                    Precisando de uma conta? <a [routerLink]="['/register']">Registre-se</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</app-card>
