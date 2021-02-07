@@ -1,10 +1,12 @@
 import {AfterContentChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {FormControl, FormGroup, Validators}                                           from "@angular/forms";
 import {Router}                                                                       from "@angular/router";
+import {io}                                                                           from "socket.io-client";
 import {AuthStorage}                                                                  from "../../@core/helpers/storage";
 import {MessageInterface}                                                             from "../../@core/interfaces/models/message.interface";
 import {UserInterface}                                                                from "../../@core/interfaces/models/user.interface";
 import {MessageService}                                                               from "../../@core/services/message.service";
+import {environment}                                                                  from "../../environments/environment";
 
 @Component({
     selector: "app-chat",
@@ -26,10 +28,13 @@ export class ChatComponent implements OnInit, AfterContentChecked {
         message: new FormControl("", [Validators.required, Validators.minLength(1)]),
     });
 
+    private socket: any;
+
     constructor(private router: Router, private messageService: MessageService) {
     }
 
     ngOnInit(): void {
+
         this.messageService.index().subscribe(httpResponse => {
             if (httpResponse.success && httpResponse.content) {
                 this.messages = httpResponse.content;
@@ -37,6 +42,19 @@ export class ChatComponent implements OnInit, AfterContentChecked {
         }, error => {
 
         });
+
+        this.socket = io(environment.ws);
+
+        this.socket.on("connect", () => {
+            this.socket.on("new-message", (message: MessageInterface) => {
+                if (message.user_id !== this.userLogged.id) {
+                    this.messages.push(message);
+                    this.payload.markAsUntouched();
+                    setTimeout(() => this.messagesScroll(), 100);
+                }
+            });
+        });
+
     }
 
     ngAfterContentChecked(): void {
@@ -76,6 +94,9 @@ export class ChatComponent implements OnInit, AfterContentChecked {
 
             if (httpResponse.success && httpResponse.content) {
                 this.messages.push(httpResponse.content);
+                this.socket.emit("new-message", httpResponse.content);
+                this.payload.markAsUntouched();
+                this.messagesScroll();
             }
 
             this.submitLoading = false;

@@ -12,6 +12,8 @@ export const environment = {
 
     getPrefixApi: () => "/api",
 
+    ws: "ws://localhost:4201",
+
 };
 
 /*
