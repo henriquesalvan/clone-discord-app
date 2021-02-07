@@ -1,8 +1,10 @@
 import {AfterContentChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from "@angular/core";
 import {FormControl, FormGroup, Validators}                                           from "@angular/forms";
-import {Router}                                                  from "@angular/router";
-import {AuthStorage}                                             from "../../@core/helpers/storage";
-import {UserInterface}                                           from "../../@core/interfaces/models/user.interface";
+import {Router}                                                                       from "@angular/router";
+import {AuthStorage}                                                                  from "../../@core/helpers/storage";
+import {MessageInterface}                                                             from "../../@core/interfaces/models/message.interface";
+import {UserInterface}                                                                from "../../@core/interfaces/models/user.interface";
+import {MessageService}                                                               from "../../@core/services/message.service";
 
 @Component({
     selector: "app-chat",
@@ -13,23 +15,28 @@ export class ChatComponent implements OnInit, AfterContentChecked {
 
     public submitLoading: boolean = false;
 
-    @ViewChild("messages", {static: true}) public elementMessages: ElementRef | undefined | null;
-
-    @ViewChild("inputMessage", {static: true}) public elementMessage: ElementRef | undefined | null;
-
     public userLogged: UserInterface = AuthStorage.getLoggedUser();
+
+    public messages: MessageInterface[] = [];
+
+    @ViewChild("elementMessages", {static: true}) public elementMessages: ElementRef | undefined | null;
 
     public payload: FormGroup = new FormGroup({
         user_id: new FormControl(this.userLogged.id, [Validators.required, Validators.min(1)]),
         message: new FormControl("", [Validators.required, Validators.minLength(1)]),
     });
 
-    public messagesCount = new Array(45);
-
-    constructor(private router: Router) {
+    constructor(private router: Router, private messageService: MessageService) {
     }
 
     ngOnInit(): void {
+        this.messageService.index().subscribe(httpResponse => {
+            if (httpResponse.success && httpResponse.content) {
+                this.messages = httpResponse.content;
+            }
+        }, error => {
+
+        });
     }
 
     ngAfterContentChecked(): void {
@@ -64,6 +71,17 @@ export class ChatComponent implements OnInit, AfterContentChecked {
         }
 
         this.submitLoading = true;
+
+        this.messageService.store(this.payload.getRawValue()).subscribe(httpResponse => {
+
+            if (httpResponse.success && httpResponse.content) {
+                this.messages.push(httpResponse.content);
+            }
+
+            this.submitLoading = false;
+            this.message?.setValue("");
+
+        });
 
     }
 

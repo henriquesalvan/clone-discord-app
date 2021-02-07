@@ -6,20 +6,18 @@
         <app-button (click)="logout()" class="btn-dark">Sair do chat</app-button>
     </div>
     <div card-content>
-        <div #messages class="row messages">
-            <div *ngFor="let message of messagesCount" class="col-xs-12 message">
-                <label class="user">Henrique Salvan <span class="hour"> - 10 minutos atrás</span></label>
-                <p class="says">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                </p>
+        <div #elementMessages class="row messages">
+            <div *ngFor="let message of messages" class="col-xs-12 message">
+                <label class="user">{{message.user.name}} <span class="hour"> - {{message.created_at | date:"dd/MM/YY HH:ss"}}</span></label>
+                <p class="says">{{message.message}}</p>
             </div>
         </div>
     </div>
     <div card-footer>
         <form [formGroup]="payload" (ngSubmit)="submit()">
             <app-fieldrow [abstractControl]="message">
-                <input #inputMessage type="text" name="message" placeholder="Mensagem" formControlName="message"/>
-                <app-button type="submit" class="btn-secondary btn-action">Enviar</app-button>
+                <input type="text" name="message" placeholder="Mensagem" formControlName="message"/>
+                <app-button type="submit" [loading]="submitLoading" class="btn-secondary btn-action">Enviar</app-button>
             </app-fieldrow>
         </form>
     </div>
