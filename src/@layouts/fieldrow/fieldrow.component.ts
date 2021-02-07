@@ -14,7 +14,7 @@ import {AbstractControl}  from "@angular/forms";
 export class FieldrowComponent {
 
     @Input("label") public label: string = "";
-    @Input("abstractControl") public abstractControl: AbstractControl | undefined = undefined;
+    @Input("abstractControl") public abstractControl?: AbstractControl;
 
     get labelHelper() {
         return this.isInvalid ? "- campo obrigatório" : "";

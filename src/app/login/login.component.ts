@@ -1,6 +1,8 @@
 import {Component, OnInit}                  from "@angular/core";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router}                             from "@angular/router";
+import {AuthStorage}                        from "../../@core/helpers/storage";
+import {LoginService}                       from "../../@core/services/login.service";
 
 @Component({
     selector: "app-login",
@@ -12,11 +14,11 @@ export class LoginComponent implements OnInit {
     public submitLoading: boolean = false;
 
     public payload: FormGroup = new FormGroup({
-        cpf: new FormControl("", [Validators.required, Validators.minLength(14)]),
-        password: new FormControl("", [Validators.required, Validators.minLength(6)]),
+        cpf: new FormControl("999.999.999-99", [Validators.required, Validators.minLength(14)]),
+        password: new FormControl("secret", [Validators.required, Validators.minLength(6)]),
     });
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private loginService: LoginService) {
     }
 
     ngOnInit(): void {
@@ -39,10 +41,18 @@ export class LoginComponent implements OnInit {
 
         this.submitLoading = true;
 
-        setTimeout(() => {
+        this.loginService.login(this.payload.getRawValue()).subscribe(httpResponse => {
+
+            if (httpResponse.success && httpResponse.content) {
+                AuthStorage.setToken(httpResponse.content);
+                this.router.navigate(["/chat"]);
+            } else {
+                throw "Problema com o login";
+            }
+
             this.submitLoading = false;
-            this.router.navigate(["/chat"]);
-        }, 1000);
+
+        });
     }
 
 }

@@ -1,7 +1,9 @@
 import {CommonModule}        from "@angular/common";
+import {HttpClientModule}    from "@angular/common/http";
 import {NgModule}            from "@angular/core";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgxMaskModule}       from "ngx-mask";
+import {LoginService}        from "../../@core/services/login.service";
 import {ButtonModule}        from "../../@layouts/button/button.module";
 import {CardModule}          from "../../@layouts/card/card.module";
 import {FieldrowModule}      from "../../@layouts/fieldrow/fieldrow.module";
@@ -20,6 +22,10 @@ import {LoginComponent}     from "./login.component";
         CardModule,
         NgxMaskModule.forRoot(),
         ReactiveFormsModule,
+        HttpClientModule,
+    ],
+    providers: [
+        LoginService,
     ]
 })
 export class LoginModule {
