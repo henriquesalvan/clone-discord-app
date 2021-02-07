@@ -1,19 +1,22 @@
-import {Component, OnInit}                  from "@angular/core";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {Router}                             from "@angular/router";
-import {AuthStorage}                        from "../../@core/helpers/storage";
-import {LoginService}                       from "../../@core/services/login.service";
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from "@angular/core";
+import {FormControl, FormGroup, Validators}                      from "@angular/forms";
+import {Router}                                   from "@angular/router";
+import {__nativeWindow}                           from "../../@core/helpers/functions";
+import {AuthStorage}                              from "../../@core/helpers/storage";
+import {LoginService}                             from "../../@core/services/login.service";
 
 @Component({
     selector: "app-login",
     templateUrl: "./login.component.html",
     styleUrls: ["./login.component.scss"]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements AfterViewInit {
 
     public submitLoading: boolean = false;
 
     public errorMessage?: string | undefined | null;
+
+    public successMessage?: string | undefined | null;
 
     public payload: FormGroup = new FormGroup({
         cpf: new FormControl("", [Validators.required, Validators.minLength(14)]),
@@ -23,7 +26,14 @@ export class LoginComponent implements OnInit {
     constructor(private router: Router, private loginService: LoginService) {
     }
 
-    ngOnInit(): void {
+    ngAfterViewInit(): void {
+
+        let newUser = __nativeWindow().history.state?.newUser;
+
+        if (newUser && newUser.id) {
+            this.successMessage = "Conta criada com sucesso!";
+        }
+
     }
 
     get cpf() {
@@ -37,6 +47,7 @@ export class LoginComponent implements OnInit {
     public informError(message: string) {
         this.payload.reset();
         this.errorMessage = message;
+        this.successMessage = undefined;
     }
 
     public submit() {

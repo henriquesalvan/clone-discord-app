@@ -1,6 +1,13 @@
 <form [formGroup]="payload" (ngSubmit)="submit()">
     <app-card title="Faça seu login">
         <div card-content>
+            <div *ngIf="successMessage && successMessage.length >= 1" class="row">
+                <div class="col-xs-12">
+                    <app-alert class="alert-success">
+                        {{successMessage}}
+                    </app-alert>
+                </div>
+            </div>
             <div *ngIf="errorMessage && errorMessage.length >= 1" class="row">
                 <div class="col-xs-12">
                     <app-alert class="alert-danger">
@@ -16,7 +23,7 @@
                 </div>
                 <div class="col-xs-12">
                     <app-fieldrow label="Senha" [abstractControl]="password">
-                        <input type="password" name="password" placeholder="Senha" formControlName="password"/>
+                        <input type="password" name="password" placeholder="Senha" formControlName="password" autocomplete="off"/>
                     </app-fieldrow>
                 </div>
             </div>
