@@ -1,12 +1,12 @@
-import {AfterContentChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from "@angular/core";
-import {FormControl, FormGroup, Validators}                                           from "@angular/forms";
-import {Router}                                                                       from "@angular/router";
-import {io}                                                                           from "socket.io-client";
-import {AuthStorage}                                                                  from "../../@core/helpers/storage";
-import {MessageInterface}                                                             from "../../@core/interfaces/models/message.interface";
-import {UserInterface}                                                                from "../../@core/interfaces/models/user.interface";
-import {MessageService}                                                               from "../../@core/services/message.service";
-import {environment}                                                                  from "../../environments/environment";
+import {AfterContentChecked, Component, ElementRef, OnInit, ViewChild} from "@angular/core";
+import {FormControl, FormGroup, Validators}                            from "@angular/forms";
+import {Router}                                                        from "@angular/router";
+import {io}                                                            from "socket.io-client";
+import {AuthStorage}                                                   from "../../@core/helpers/storage";
+import {MessageInterface}                                              from "../../@core/interfaces/models/message.interface";
+import {UserInterface}                                                 from "../../@core/interfaces/models/user.interface";
+import {MessageService}                                                from "../../@core/services/message.service";
+import {environment}                                                   from "../../environments/environment";
 
 @Component({
     selector: "app-chat",
@@ -21,51 +21,25 @@ export class ChatComponent implements OnInit, AfterContentChecked {
 
     public messages: MessageInterface[] = [];
 
+    private socket: any;
+
     @ViewChild("elementMessages", {static: true}) public elementMessages: ElementRef | undefined | null;
 
     public payload: FormGroup = new FormGroup({
         user_id: new FormControl(this.userLogged.id, [Validators.required, Validators.min(1)]),
-        message: new FormControl("", [Validators.required, Validators.minLength(1)]),
+        message: new FormControl(""),
     });
-
-    private socket: any;
 
     constructor(private router: Router, private messageService: MessageService) {
     }
 
     ngOnInit(): void {
-
-        this.messageService.index().subscribe(httpResponse => {
-            if (httpResponse.success && httpResponse.content) {
-                this.messages = httpResponse.content;
-            }
-        }, error => {
-
-        });
-
-        this.socket = io(environment.ws);
-
-        this.socket.on("connect", () => {
-            this.socket.on("new-message", (message: MessageInterface) => {
-                if (message.user_id !== this.userLogged.id) {
-                    this.messages.push(message);
-                    this.payload.markAsUntouched();
-                    setTimeout(() => this.messagesScroll(), 100);
-                }
-            });
-        });
-
+        this.loadMessages();
+        this.initSocket();
     }
 
     ngAfterContentChecked(): void {
         this.messagesScroll();
-    }
-
-    private messagesScroll() {
-        this.elementMessages?.nativeElement.scrollTo({
-            left: 0,
-            top: this.elementMessages?.nativeElement?.scrollHeight + 100
-        });
     }
 
     get firstName() {
@@ -76,6 +50,63 @@ export class ChatComponent implements OnInit, AfterContentChecked {
         return this.payload.get("message");
     }
 
+    private messagesScroll() {
+        this.elementMessages?.nativeElement.scrollTo({
+            left: 0,
+            top: this.elementMessages?.nativeElement?.scrollHeight + 100
+        });
+    }
+
+    private loadMessages() {
+        this.messageService.index().subscribe(httpResponse => {
+            if (httpResponse.success && httpResponse.content) {
+                this.messages = httpResponse.content;
+            }
+        }, error => {
+
+        });
+    }
+
+    private initSocket() {
+
+        this.socket = io(environment.ws);
+
+        this.socket.on("connect", () => {
+            this.socket.on("new-message", (message: MessageInterface) => {
+                if (message.user_id !== this.userLogged.id) {
+
+                    this.messages.push(message);
+                    this.notify(message);
+
+                    setTimeout(() => this.messagesScroll(), 100);
+
+                }
+            });
+        });
+
+    }
+
+    private notify(message: MessageInterface) {
+
+        if (!("Notification" in window)) {
+            return;
+        }
+
+        let newNotification = (message: MessageInterface) => {
+            new Notification(message?.user?.name || "", {body: message.message});
+        };
+
+        if (Notification.permission === "granted") {
+            newNotification(message);
+        } else if (Notification.permission !== "denied") {
+            Notification.requestPermission((permission) => {
+                if (permission === "granted") {
+                    newNotification(message);
+                }
+            });
+        }
+    }
+
     public logout() {
         AuthStorage.deleteLoggedUserAndToken();
         this.router.navigate(["/login"]);
@@ -83,8 +114,7 @@ export class ChatComponent implements OnInit, AfterContentChecked {
 
     public submit() {
 
-        if (!this.payload.valid) {
-            this.payload.markAllAsTouched();
+        if (this.message?.value?.length === 0) {
             return;
         }
 
@@ -93,10 +123,12 @@ export class ChatComponent implements OnInit, AfterContentChecked {
         this.messageService.store(this.payload.getRawValue()).subscribe(httpResponse => {
 
             if (httpResponse.success && httpResponse.content) {
+
                 this.messages.push(httpResponse.content);
-                this.socket.emit("new-message", httpResponse.content);
-                this.payload.markAsUntouched();
                 this.messagesScroll();
+
+                this.socket.emit("new-message", httpResponse.content);
+
             }
 
             this.submitLoading = false;
