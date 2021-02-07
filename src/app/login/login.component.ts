@@ -16,8 +16,8 @@ export class LoginComponent implements OnInit {
     public errorMessage?: string | undefined | null;
 
     public payload: FormGroup = new FormGroup({
-        cpf: new FormControl("999.999.999-99", [Validators.required, Validators.minLength(14)]),
-        password: new FormControl("secret", [Validators.required, Validators.minLength(6)]),
+        cpf: new FormControl("", [Validators.required, Validators.minLength(14)]),
+        password: new FormControl("", [Validators.required, Validators.minLength(6)]),
     });
 
     constructor(private router: Router, private loginService: LoginService) {
