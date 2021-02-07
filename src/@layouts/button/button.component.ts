@@ -4,7 +4,7 @@ import {Component, Input} from "@angular/core";
     selector: "app-button",
     styleUrls: ["./button.component.scss"],
     template: `
-        <button [disabled]="loading" class="btn {{class}}">
+        <button [type]="type" [disabled]="loading" [class]="classes">
             <ng-template [ngIf]="!loading">
                 <ng-content></ng-content>
             </ng-template>
@@ -17,6 +17,11 @@ import {Component, Input} from "@angular/core";
 export class ButtonComponent {
 
     @Input("class") public class: string = "";
+    @Input("type") public type: string = "button";
     @Input("loading") public loading: boolean = false;
+
+    get classes() {
+        return this.class.length >= 1 ? `btn ${this.class}` : "btn";
+    }
 
 }
