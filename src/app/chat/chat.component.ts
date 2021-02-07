@@ -21,6 +21,8 @@ export class ChatComponent implements OnInit, AfterContentChecked {
 
     public messages: MessageInterface[] = [];
 
+    public messageCharactersLimit: number = 30;
+
     private socket: any;
 
     @ViewChild("elementMessages", {static: true}) public elementMessages: ElementRef | undefined | null;

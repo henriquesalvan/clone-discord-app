@@ -16,9 +16,12 @@
     <div card-footer>
         <form [formGroup]="payload" (ngSubmit)="submit()">
             <app-fieldrow [abstractControl]="message">
-                <input type="text" name="message" placeholder="Mensagem" formControlName="message"/>
+                <input type="text" name="message" placeholder="Mensagem" formControlName="message" [maxlength]="messageCharactersLimit"/>
                 <app-button type="submit" [loading]="submitLoading" class="btn-secondary btn-action">Enviar</app-button>
             </app-fieldrow>
+            <i class="limit-characters" [ngClass]="{'warning': message.value.length === messageCharactersLimit}">
+                {{messageCharactersLimit - message.value.length}}
+            </i>
         </form>
     </div>
 </app-card>

@@ -4,6 +4,17 @@
     left: 50%;
 }
 
+.limit-characters {
+    margin-top: 5px;
+    color: #e0e0e0;
+    display: inline-block;
+}
+
+.limit-characters.warning {
+    color: red;
+    font-weight: bold;
+}
+
 .messages {
     min-height: 400px;
     max-height: 400px;
