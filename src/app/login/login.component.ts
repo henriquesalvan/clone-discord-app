@@ -13,6 +13,8 @@ export class LoginComponent implements OnInit {
 
     public submitLoading: boolean = false;
 
+    public errorMessage?: string | undefined | null;
+
     public payload: FormGroup = new FormGroup({
         cpf: new FormControl("999.999.999-99", [Validators.required, Validators.minLength(14)]),
         password: new FormControl("secret", [Validators.required, Validators.minLength(6)]),
@@ -32,6 +34,11 @@ export class LoginComponent implements OnInit {
         return this.payload.get("password");
     }
 
+    public informError(message: string) {
+        this.payload.reset();
+        this.errorMessage = message;
+    }
+
     public submit() {
 
         if (!this.payload.valid) {
@@ -47,7 +54,17 @@ export class LoginComponent implements OnInit {
                 AuthStorage.setToken(httpResponse.content);
                 this.router.navigate(["/chat"]);
             } else {
-                throw "Problema com o login";
+                this.informError("Ops, aconteceu algum problema, tente novamente mais tarde!");
+            }
+
+            this.submitLoading = false;
+
+        }, httpErrorResponse => {
+
+            if (httpErrorResponse?.error?.errors[0]?.message === "Invalid user credentials") {
+                this.informError("CPF ou senha incorretos!");
+            } else {
+                this.informError("Ops, aconteceu algum problema, tente novamente mais tarde!");
             }
 
             this.submitLoading = false;

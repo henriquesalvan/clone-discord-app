@@ -1,0 +1,33 @@
+@import "../../assets/styles/colors";
+
+.alert {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    width: 100%;
+}
+
+@each $i in $colors {
+
+    .alert.alert-#{nth($i, 1)} {
+        border-color: nth($i, 2);
+        background-color: nth($i, 2);
+        color: lighten(map_get($colors, light), 10);
+    }
+
+    .alert.alert-#{nth($i, 1)}-outline {
+        color: nth($i, 2);
+        border-color: nth($i, 2);
+        background-color: lighten(map_get($colors, light), 5);
+    }
+
+}
+
+.alert.alert-light {
+    color: map_get($colors, dark);
+
+    &:hover {
+        color: map_get($colors, dark);
+    }
+}

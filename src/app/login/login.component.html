@@ -1,6 +1,13 @@
 <form [formGroup]="payload" (ngSubmit)="submit()">
     <app-card title="Faça seu login">
         <div card-content>
+            <div *ngIf="errorMessage && errorMessage.length >= 1" class="row">
+                <div class="col-xs-12">
+                    <app-alert class="alert-danger">
+                        {{errorMessage}}
+                    </app-alert>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-xs-12">
                     <app-fieldrow label="CPF" [abstractControl]="cpf">
