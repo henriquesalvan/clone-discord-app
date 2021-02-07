@@ -1,28 +1,30 @@
 import {NgModule}             from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
+import {HttpRoutingGuard}     from "../@core/http-client/http.routing.guard";
 
-const routes: Routes = [
+const routes: Routes = [{
+    path: "",
+    canActivateChild: [HttpRoutingGuard],
+    children: [
+        {
+            path: "login",
+            loadChildren: () => import("./login/login.module").then((module) => module.LoginModule),
+            data: {routeAnimation: "login"}
+        },
+        {
+            path: "register",
+            loadChildren: () => import("./register/register.module").then((module) => module.RegisterModule),
+            data: {routeAnimation: "register"}
+        },
+        {
+            path: "chat",
+            loadChildren: () => import("./chat/chat.module").then((module) => module.ChatModule),
+            data: {routeAnimation: "chat"}
+        },
 
-    {
-        path: "login",
-        loadChildren: () => import("./login/login.module").then((module) => module.LoginModule),
-        data: {routeAnimation: "login"}
-    },
-    {
-        path: "register",
-        loadChildren: () => import("./register/register.module").then((module) => module.RegisterModule),
-        data: {routeAnimation: "register"}
-    },
-    {
-        path: "chat",
-        loadChildren: () => import("./chat/chat.module").then((module) => module.ChatModule),
-        data: {routeAnimation: "chat"}
-    },
-
-    //importante manter sempre no final
-    {path: "", redirectTo: "login", pathMatch: "full"},
-
-];
+        {path: "", redirectTo: "login", pathMatch: "full"},
+    ]
+}];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

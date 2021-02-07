@@ -98,4 +98,9 @@ export class AuthStorage extends SessionStorage {
         return <UserInterface>this.get(AuthStorage.loggedUser);
     }
 
+    public static deleteLoggedUserAndToken() {
+        this.remove(AuthStorage.token);
+        this.remove(AuthStorage.loggedUser);
+    }
+
 }

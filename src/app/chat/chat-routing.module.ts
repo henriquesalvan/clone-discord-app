@@ -1,10 +1,10 @@
 import {NgModule}             from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
-import {ChatRoutingGuard}     from "./chat-routing.guard";
+import {HttpRoutingGuard}     from "../../@core/http-client/http.routing.guard";
 import {ChatComponent}        from "./chat.component";
 
 const routes: Routes = [
-    {path: "", component: ChatComponent, canActivate: [ChatRoutingGuard]}
+    {path: "", component: ChatComponent, data: HttpRoutingGuard.needsCredentials(true)}
 ];
 
 @NgModule({

@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Router}            from "@angular/router";
+import {AuthStorage}       from "../../@core/helpers/storage";
 
 @Component({
     selector: "app-chat",
@@ -17,6 +18,7 @@ export class ChatComponent implements OnInit {
     }
 
     public logout() {
+        AuthStorage.deleteLoggedUserAndToken();
         this.router.navigate(["/login"]);
     }
 
