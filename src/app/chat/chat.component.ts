@@ -51,10 +51,12 @@ export class ChatComponent implements OnInit, AfterContentChecked {
     }
 
     private messagesScroll() {
-        this.elementMessages?.nativeElement.scrollTo({
-            left: 0,
-            top: this.elementMessages?.nativeElement?.scrollHeight + 100
-        });
+        setTimeout(() => {
+            this.elementMessages?.nativeElement.scrollTo({
+                left: 0,
+                top: this.elementMessages?.nativeElement?.scrollHeight + 100
+            });
+        }, 100);
     }
 
     private loadMessages() {
@@ -74,12 +76,9 @@ export class ChatComponent implements OnInit, AfterContentChecked {
         this.socket.on("connect", () => {
             this.socket.on("new-message", (message: MessageInterface) => {
                 if (message.user_id !== this.userLogged.id) {
-
                     this.messages.push(message);
                     this.notify(message);
-
-                    setTimeout(() => this.messagesScroll(), 100);
-
+                    this.messagesScroll();
                 }
             });
         });
@@ -123,12 +122,9 @@ export class ChatComponent implements OnInit, AfterContentChecked {
         this.messageService.store(this.payload.getRawValue()).subscribe(httpResponse => {
 
             if (httpResponse.success && httpResponse.content) {
-
                 this.messages.push(httpResponse.content);
                 this.messagesScroll();
-
                 this.socket.emit("new-message", httpResponse.content);
-
             }
 
             this.submitLoading = false;
