@@ -10,7 +10,7 @@ import {LoginService}                             from "../../@core/services/log
     templateUrl: "./login.component.html",
     styleUrls: ["./login.component.scss"]
 })
-export class LoginComponent implements AfterViewInit {
+export class LoginComponent implements OnInit {
 
     public submitLoading: boolean = false;
 
@@ -26,7 +26,7 @@ export class LoginComponent implements AfterViewInit {
     constructor(private router: Router, private loginService: LoginService) {
     }
 
-    ngAfterViewInit(): void {
+    ngOnInit(): void {
 
         let newUser = __nativeWindow().history.state?.newUser;
 

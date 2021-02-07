@@ -1,8 +1,9 @@
-import {CommonModule}   from "@angular/common";
-import {NgModule}       from "@angular/core";
-import {ButtonModule}   from "../../@layouts/button/button.module";
-import {CardModule}     from "../../@layouts/card/card.module";
-import {FieldrowModule} from "../../@layouts/fieldrow/fieldrow.module";
+import {CommonModule}        from "@angular/common";
+import {NgModule}            from "@angular/core";
+import {ReactiveFormsModule} from "@angular/forms";
+import {ButtonModule}        from "../../@layouts/button/button.module";
+import {CardModule}          from "../../@layouts/card/card.module";
+import {FieldrowModule}      from "../../@layouts/fieldrow/fieldrow.module";
 
 import {ChatRoutingModule} from "./chat-routing.module";
 import {ChatComponent}     from "./chat.component";
@@ -16,6 +17,7 @@ import {ChatComponent}     from "./chat.component";
         ButtonModule,
         FieldrowModule,
         CardModule,
+        ReactiveFormsModule,
     ]
 })
 export class ChatModule {

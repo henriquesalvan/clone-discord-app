@@ -1,12 +1,12 @@
 <app-card>
     <div card-header>
         <div class="card-title">
-            Seja bem-vindo Henrique
+            Seja bem-vindo {{firstName}}
         </div>
         <app-button (click)="logout()" class="btn-dark">Sair do chat</app-button>
     </div>
     <div card-content>
-        <div class="row messages">
+        <div #messages class="row messages">
             <div *ngFor="let message of messagesCount" class="col-xs-12 message">
                 <label class="user">Henrique Salvan <span class="hour"> - 10 minutos atrás</span></label>
                 <p class="says">
@@ -16,9 +16,11 @@
         </div>
     </div>
     <div card-footer>
-        <app-fieldrow>
-            <input type="text" name="message" placeholder="Mensagem"/>
-            <app-button class="btn-secondary btn-action">Enviar</app-button>
-        </app-fieldrow>
+        <form [formGroup]="payload" (ngSubmit)="submit()">
+            <app-fieldrow [abstractControl]="message">
+                <input #inputMessage type="text" name="message" placeholder="Mensagem" formControlName="message"/>
+                <app-button type="submit" class="btn-secondary btn-action">Enviar</app-button>
+            </app-fieldrow>
+        </form>
     </div>
 </app-card>
