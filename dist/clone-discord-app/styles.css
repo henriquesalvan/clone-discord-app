@@ -1,0 +1,36 @@
+@import url(https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap);
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+  font-family: "Lato", sans-serif;
+}
+body {
+  overflow: hidden;
+}
+a {
+  color: #7289DA;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #2D2D2D;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: #7289DA;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4a67cf;
+}
+
+/*# sourceMappingURL=styles.css.map*/

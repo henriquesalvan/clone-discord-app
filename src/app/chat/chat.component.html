@@ -8,7 +8,7 @@
     <div card-content>
         <div #elementMessages class="row messages">
             <div *ngFor="let message of messages" class="col-xs-12 message">
-                <label class="user">{{message.user.name}} <span class="hour"> - {{message.created_at | date:"dd/MM/YY HH:ss"}}</span></label>
+                <label class="user">{{message?.user?.name}} <span class="hour"> - {{message.created_at | date:"dd/MM/YY HH:ss"}}</span></label>
                 <p class="says">{{message.message}}</p>
             </div>
         </div>
@@ -19,8 +19,8 @@
                 <input type="text" name="message" placeholder="Mensagem" formControlName="message" [maxlength]="messageCharactersLimit"/>
                 <app-button type="submit" [loading]="submitLoading" class="btn-secondary btn-action">Enviar</app-button>
             </app-fieldrow>
-            <i class="limit-characters" [ngClass]="{'warning': message.value.length === messageCharactersLimit}">
-                {{messageCharactersLimit - message.value.length}}
+            <i class="limit-characters" [ngClass]="{'warning': message?.value?.length === messageCharactersLimit}">
+                {{messageCharactersLimit - message?.value?.length}}
             </i>
         </form>
     </div>
