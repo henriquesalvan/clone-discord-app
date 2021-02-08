@@ -13,7 +13,7 @@ import {environment}                                                   from "../
     templateUrl: "./chat.component.html",
     styleUrls: ["./chat.component.scss"]
 })
-export class ChatComponent implements OnInit, AfterContentChecked {
+export class ChatComponent implements OnInit {
 
     public submitLoading: boolean = false;
 
@@ -40,10 +40,6 @@ export class ChatComponent implements OnInit, AfterContentChecked {
         this.initSocket();
     }
 
-    ngAfterContentChecked(): void {
-        this.messagesScroll();
-    }
-
     get firstName() {
         return this.userLogged.name.split(" ")[0];
     }
@@ -65,9 +61,10 @@ export class ChatComponent implements OnInit, AfterContentChecked {
         this.messageService.index().subscribe(httpResponse => {
             if (httpResponse.success && httpResponse.content) {
                 this.messages = httpResponse.content;
+                this.messagesScroll();
             }
         }, error => {
-
+            throw error;
         });
     }
 
